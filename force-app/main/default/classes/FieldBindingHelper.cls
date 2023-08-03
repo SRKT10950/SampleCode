@@ -21,6 +21,8 @@ public with sharing class FieldBindingHelper {
                 obj.put(key,DateTime.valueOf(recordFieldWithValueMap.get(key)));
                 }
                 when currency, double, percent {
+                    System.debug('Double : '+fieldInfo.getType());
+                    System.debug('Double : '+recordFieldWithValueMap.get(key));
                     if(recordFieldWithValueMap.get(key)!=''){
                         obj.put(key,Double.valueOf(recordFieldWithValueMap.get(key)));
                     }else{
@@ -42,9 +44,16 @@ public with sharing class FieldBindingHelper {
         System.debug(obj);
         return obj;
     }
+    // public static map<string,string> recordValueMap(map<string,string> objectFieldWithFieldNameMap,map<string,string> userFieldWithValueMap){
+    //     map<string,string> fieldValueMap=new map<string,string>();
+    //     for(string key:userFieldWithValueMap.keySet()){
+    //         fieldValueMap.put(objectFieldWithFieldNameMap.get(key), userFieldWithValueMap(key));
+    //     }
+    //     return fieldValueMap;
+    // }
     public static  map<string,string> objectFieldWithFieldNameMap(){
         map<string,string> fieldMap=new map<string,string>();
-        fieldMap.put('FieldName', 'SalesforceFieldName');
-        return fieldMap;
+            fieldMap.put('FieldName', 'SalesforceFieldName');
+            return fieldMap;
     }
 }
