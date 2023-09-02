@@ -206,7 +206,7 @@ public without sharing class UtilityClass {
             System.debug('getExtAndSForceFieldRelationMap : '+extAndSForceFieldRelationMap);
             return extAndSForceFieldRelationMap;
         }
-        public static sObject getObjectRecord(map<String,object> mapRecordValue,String customMetajsonObject,String objectApiName){
+        public static sObject generateObjectRecord(map<String,object> mapRecordValue,String customMetajsonObject,String objectApiName){
             map<String,String> mapSForceFieldValue=new map<String,String>();
             Map<String,Object> extAndSForceFieldRelationMap=getExtAndSForceFieldRelationMap(customMetajsonObject);
             for(String field:mapRecordValue.keySet()){

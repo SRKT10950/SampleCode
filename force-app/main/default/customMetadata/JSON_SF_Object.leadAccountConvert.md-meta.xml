@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>leadAccountConvert</label>
+    <protected>false</protected>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">Create account from lead</value>
+    </values>
+    <values>
+        <field>JSON_Body__c</field>
+        <value xsi:type="xsd:string">{
+  &quot;array&quot;: [
+    1,
+    2,
+    3
+  ],
+  &quot;boolean&quot;: true,
+  &quot;null&quot;: null,
+  &quot;number&quot;: 123,
+  &quot;object&quot;: {
+    &quot;a&quot;: &quot;b&quot;,
+    &quot;c&quot;: &quot;d&quot;,
+    &quot;e&quot;: &quot;f&quot;
+  },
+  &quot;string&quot;: &quot;Hello World&quot;
+}</value>
+    </values>
+    <values>
+        <field>Object_Name__c</field>
+        <value xsi:type="xsd:string">Account</value>
+    </values>
+</CustomMetadata>
