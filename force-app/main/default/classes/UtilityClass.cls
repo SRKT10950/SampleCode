@@ -8,16 +8,16 @@
 **/
 public without sharing class UtilityClass {
 
-    private static final String[] ones = new String[]{'', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'};
-    private static final String[] teens = new String[]{'', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'};
-    private static final String[] tens = new String[]{'', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'};
-    private static final String[] internationalDenominations = new String[]{'', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion'};
-    private static final String[] indianDenominations = new String[]{'', 'thousand', 'lakh', 'crore'};
+    private static final String[] ONES = new String[]{'', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'};
+    private static final String[] TEENS = new String[]{'', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'};
+    private static final String[] TENS = new String[]{'', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'};
+    private static final String[] INTERNATIONALDENOMINATIONS = new String[]{'', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion'};
+    private static final String[] INDIANDENOMINATIONS= new String[]{'', 'thousand', 'lakh', 'crore'};
 
 
     /**
     * @description It will create the records of the apex error log. To track the error details.
-    * Object Name Apex og Detail
+    * Object Name Error Log Detail
     * @author Sri Ram Kumar | 02-26-2023
     * @param ex
     * @return Error_Log__c
@@ -164,4 +164,54 @@ public without sharing class UtilityClass {
 
         return result.trim();
     }
+    public static void rollupSummary(list<string> parentRecordIds,String objectApiName){
+        String sQuery =null;
+        Map<String,Map<String,String>> rollupObject=new Map<String,Map<String,String>>();
+        Map<String, Rollup_Summary__mdt> mapRollupSummary = Rollup_Summary__mdt.getAll();
+         if(parentRecordIds!=null && parentRecordIds.size()>0){
+            sQuery =null;
+        }else if(objectApiName!=null){
+            sQuery =null;
+        system.debug('Query : '+ sQuery);
+        }
+        for(String rollup: mapRollupSummary.keySet()){
+            if(mapRollupSummary.get(rollup).Object_Name__c == objectApiName){
+                if(rollupObject.containsKey(mapRollupSummary.get(rollup).Object_Name__c)){
+                rollupObject.get(mapRollupSummary.get(rollup).Object_Name__c).put(mapRollupSummary.get(rollup).Field_Name__c, mapRollupSummary.get(rollup).Logic__c);
+            }else{
+            map<String,String> tempMap=new map<String,String>();
+            tempMap.put(mapRollupSummary.get(rollup).Field_Name__c, mapRollupSummary.get(rollup).Logic__c);
+            rollupObject.put(mapRollupSummary.get(rollup).Object_Name__c, tempMap);
+            }
+            System.debug(rollup+' --> '+rollupObject);
+            }
+        }
+        for(String strObjectName:rollupObject.keySet()){
+            for(String strFieldName:rollupObject.get(strObjectName).keySet()){
+
+            }
+        }
+    }
+        // Get all summary details of the object from custom metadata
+        // build the soql querry
+        // Store the values in list object
+        // stop trigger on object before update
+        // API_Endpoint_Attribute__mdt folderEndpoint = API_Endpoint_Attribute__mdt.getInstance('Folders'); //single record
+        public static Map<String,Object> getExtAndSForceFieldRelationMap(String jsonObjectName){
+            Map<String,Object> extAndSForceFieldRelationMap=new Map<String,Object>();
+            if(String.isNotBlank(jsonObjectName)){
+                JSON_SF_Object__mdt jsonObjectRec = JSON_SF_Object__mdt.getInstance(jsonObjectName); //single record
+                extAndSForceFieldRelationMap=(Map<String, Object>)JSON.deserializeUntyped(jsonObjectRec.JSON_Body__c);
+            }
+            System.debug('getExtAndSForceFieldRelationMap : '+extAndSForceFieldRelationMap);
+            return extAndSForceFieldRelationMap;
+        }
+        public static sObject getObjectRecord(map<String,object> mapRecordValue,String customMetajsonObject,String objectApiName){
+            map<String,String> mapSForceFieldValue=new map<String,String>();
+            Map<String,Object> extAndSForceFieldRelationMap=getExtAndSForceFieldRelationMap(customMetajsonObject);
+            for(String field:mapRecordValue.keySet()){
+                mapSForceFieldValue.put(String.valueOf(extAndSForceFieldRelationMap.get(field)), String.valueOf(mapRecordValue.get(field)));
+            }
+            return (createObject(mapSForceFieldValue,objectApiName));
+        }
 }
